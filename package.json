@@ -1,0 +1,82 @@
+{
+    "homepage": "http://betajs.com",
+    "license": "Apache-2.0",
+    "licenses": [
+        {
+            "type": "Apache-2.0",
+            "url": "https://github.com/betajs/betajs-sql/blob/master/LICENSE"
+        }
+    ],
+    "author": {
+        "name": "BetaJS",
+        "email": "info@betajs.com"
+    },
+    "bugs": {
+        "url": "https://github.com/betajs/betajs-sql/issues"
+    },
+    "name": "betajs-sql",
+    "version": "1.0.0",
+    "description": "BetaJS-SQL is a sql wrapper for BetaJS.",
+    "contributors": [
+        "Pablo Iglesias"
+    ],
+    "devDependencies": {
+        "lodash": "",
+        "grunt": "",
+        "grunt-contrib-jshint": "",
+        "grunt-contrib-concat": "",
+        "grunt-contrib-uglify": "",
+        "grunt-contrib-clean": "",
+        "grunt-preprocess": "",
+        "grunt-git-revision-count": "",
+        "grunt-closure-tools": "",
+        "grunt-node-qunit": "",
+        "qunit": "",
+        "grunt-wget": "",
+        "grunt-jsdoc": "",
+        "grunt-shell": "",
+        "grunt-template": "",
+        "grunt-betajs-docs-compile": "",
+        "betajs-scoped": "",
+        "betajs-compile": "betajs/betajs-compile"
+    },
+    "dependencies": {
+        "betajs": "",
+        "betajs-data": "",
+        "betajs-server": "",
+        "node-redshift": ""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/betajs/betajs-sql.git"
+    },
+    "meta": {
+        "blog": "http://blog.betajs.com",
+        "twitter": "http://twitter.com/thebetajs",
+        "guid": "9955100d-6a88-451f-9a85-004523eb8589",
+        "installdoc": "docsrc/common/install.md",
+        "summarydoc": "docsrc/common/summary.md",
+        "badges": {
+            "codeclimate": true,
+            "travis": false,
+            "npm": false
+        },
+        "compatability": {
+            "NodeJS": "0.10 - Latest"
+        },
+        "weakDependencies": {
+            "betajs-scoped": "https://github.com/betajs/betajs-scoped"
+        },
+        "dependencies": {
+            "betajs": "https://github.com/betajs/betajs",
+            "betajs-data": "https://github.com/betajs/betajs-data",
+            "betajs-server": "https://github.com/betajs/betajs-server"
+        },
+        "cdn": {
+            "betajs-sql.js": "http://cdn.rawgit.com/betajs/betajs-sql/master/dist/betajs-sql.js",
+            "betajs-sql.min.js": "http://cdn.rawgit.com/betajs/betajs-sql/master/dist/betajs-sql.min.js",
+            "betajs-sql-noscoped.js": "http://cdn.rawgit.com/betajs/betajs-sql/master/dist/betajs-sql-noscoped.js",
+            "betajs-sql-noscoped.min.js": "http://cdn.rawgit.com/betajs/betajs-sql/master/dist/betajs-sql-noscoped.min.js"
+        }
+    }
+}
