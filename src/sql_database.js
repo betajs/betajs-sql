@@ -24,6 +24,7 @@ Scoped.define("server:Databases.SqlDatabase", [
 				}
 				inherited.constructor.call(this);
 				this.sql_module = require("node-redshift");
+				this.sql_bricks = require("sql-bricks");
 			},
 
 			_tableClass : function() {
@@ -34,13 +35,9 @@ Scoped.define("server:Databases.SqlDatabase", [
 				var ret = this.__sqldb;
 				if (!this.__sqldb) {
 					var sqldbman = this.sql_module;
-					sqldbman.Promise = Promise;
-					var prom = sqldbman.Promise.create();
-					var sqldb = new sqldbman.Connection('mssql://' + this.__dbUri, prom.asyncCallbackFunc());
-					ret = prom.success(function () {
-						this.__sqldb = sqldb;
-						this.__sqldbreq = new this.sql_module.Request(sqldb);
-					}, this);
+					var sqldb = new sqldbman(this.__dbObject);
+					this.__sqldb = sqldb;
+					ret = sqldb;
 				}
 
 				return ret;
@@ -65,7 +62,7 @@ Scoped.define("server:Databases.SqlDatabase", [
 			var parsed = Uri.parse(uri);
 			return {
 				database : Strings.strip_start(parsed.path, "/"),
-				server : parsed.host,
+				host : parsed.host,
 				port : parsed.port,
 				username : parsed.user,
 				password : parsed.password

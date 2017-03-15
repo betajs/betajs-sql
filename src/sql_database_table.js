@@ -12,11 +12,9 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 			    this._table_id = table_id;
 		    if (this.__req)
 			    return this.__req;
-		    return this._database.sqldb().mapSuccess(function () {
-			    this.__req = this._database.sqldbReqObj();
-			    this.__sql = this._database.sqldbMod();
-			    return this.__req;
-		    }, this);
+		    this.__req = this._database.sqldb();
+		    this.__sqlbricks = this._database.sql_bricks;
+		    return this.__req;
 	    },
 
 	    _encode: function (data) {
@@ -28,26 +26,32 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 	    },
 
 	    _find: function (baseQuery, options) {
-		    return this.table().mapSuccess(function (req) {
-			    var query = this.__formatFind(baseQuery, options);
-			    return Promise.funcCallback(req, req.query, query).mapSuccess(function (result, op) {
-				    return Promise.funcCallback(result, result.toArray).mapSuccess(function (cols) {
-					    return new ArrayIterator(cols);
-				    }, this);
-			    }, this).mapError(function (err) {
-				    return err;
-			    });
-		    }, this);
+		    var req = this.table();
+		    var query = this.__formatFind(baseQuery, options);
+		    var prom = Promise.create();
+		    return Promise.funcCallback(req, req.query, query, {}).mapSuccess(function (result) {
+			    return new ArrayIterator(result.rows);
+		    }, this).mapError(function (err) {
+			    return err;
+		    });
+		    /* mapSuccess(function (result, op) {
+		     return Promise.funcCallback(result, result.toArray).mapSuccess(function (cols) {
+		     return new ArrayIterator(cols);
+		     }, this);
+		     }, this).mapError(function (err) {
+		     return err;
+		     });*/
 	    },
 
 	    _insertRow: function (row) {
-		    return this.table().mapSuccess(function (req) {
-			    var query = this.__formatInsertRow(row);
-			    return Promise.funcCallback(req, req.query, query).mapSuccess(function (record, result) {
-				    return record[0];
-			    }, this).mapError(function (err) {
-				    return err;
-			    });
+		    var req = this.table();
+		    var query = this.__formatInsertRow(row);
+		    var prom = Promise.create();
+		    req.query(query, {}, prom.asyncCallbackFunc());
+		    return prom.success(function (result) {
+			    return result;
+		    }, this).error(function (result) {
+			    return result;
 		    }, this);
 	    },
 
@@ -82,25 +86,24 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 	    },
 
 	    __formatInsertRow: function (rowObject) {
-		    var req = this.__req;
-		    var sql = this.__sql;
-		    var columns = "";
-		    var values = "";
-		    Objs.iter(rowObject, function (value, key) {
-			    columns = columns + key.toString() + ",";
-			    values = values + "@" + key.toString() + ",";
-			    req.input(key, sql.VarChar, value);
-		    }, this);
-		    this.__req = req;
-		    return 'INSERT INTO ' + this.__tableName() + ' (' + columns.slice(0, -1) + ') OUTPUT INSERTED.* VALUES (' + values.slice(0, -1) + ');';
-
+		    var sql = this.__getFormatter();
+		    return sql.insert(this.__tableName(), rowObject).toParams();
 	    },
 
 	    __formatFind: function (queryObj, options) {
 		    options = options || {};
-		    var query = 'SELECT * FROM ' + this.__tableName();
-		    return query;
+		    var columns = options.columns || "*";
+		    var sql = this.__getFormatter();
+		    var query = sql.select(columns).from(this.__tableName());
+		    if (options.distinct)
+			    query = sql.distinct(columns).from(this.__tableName());
+		    if (queryObj)
+			    query.where(queryObj);
+		    return query.toParams();
+	    },
 
+	    __getFormatter: function () {
+		    return this.__sqlbricks;
 	    }
     });
 });
