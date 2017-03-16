@@ -34,13 +34,6 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 		    }, this).mapError(function (err) {
 			    return err;
 		    });
-		    /* mapSuccess(function (result, op) {
-		     return Promise.funcCallback(result, result.toArray).mapSuccess(function (cols) {
-		     return new ArrayIterator(cols);
-		     }, this);
-		     }, this).mapError(function (err) {
-		     return err;
-		     });*/
 	    },
 
 	    _insertRow: function (row) {
@@ -95,11 +88,65 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 		    var columns = options.columns || "*";
 		    var sql = this.__getFormatter();
 		    var query = sql.select(columns).from(this.__tableName());
+		    if (queryObj) {
+			    var where;
+			    if (Types.is_array(queryObj) || Types.is_object(queryObj)) {
+				    query = this.__extractWhereParams(queryObj, query);
+			    }
+		    }
 		    if (options.distinct)
 			    query = sql.distinct(columns).from(this.__tableName());
-		    if (queryObj)
-			    query.where(queryObj);
+
+		    if (options.groupBy)
+			    query.groupBy(options.groupBy);
+		    if (options.orderBy)
+			    query.orderBy(options.orderBy);
 		    return query.toParams();
+	    },
+
+	    __extractWhereParams: function (queryObj, query) {
+		    Objs.iter(queryObj, function (obj, key) {
+			    if (Objs.contains_value(this.__specialWhereParams(), key)) {
+				    query = this.__specialWhereParam(query, key, obj);
+			    } else {
+				    if (Types.is_object(obj)) {
+					    query.where(obj);
+				    } else {
+					    if (queryObj.hasOwnProperty(key)) {
+						    var whereObj = {};
+						    whereObj[key] = obj;
+						    query.where(whereObj);
+					    }
+				    }
+			    }
+		    }, this);
+
+		    return query;
+	    },
+
+	    __specialWhereParam: function (query, key, obj) {
+		    var sql = this.__getFormatter();
+		    if (key == "or") {
+			    query.where(sql.or(obj));
+		    } else {
+			    if (Types.is_object(obj) && !Types.is_array(obj)) {
+				    var keyW = Objs.keys(obj)[0];
+				    var valueW = Objs.values(obj)[0];
+				    query.where(sql[key](keyW, valueW));
+			    } else {
+				    if (Types.is_array(obj)) {
+					    Objs.iter(obj, function (objI, keyI) {
+						    query = this.__specialWhereParam(query, key, objI);
+					    }, this);
+				    }
+			    }
+
+		    }
+		    return query;
+	    },
+
+	    __specialWhereParams: function () {
+		    return ["or", "eq", "notEq", "lt", "lte", "gt","gte"]
 	    },
 
 	    __getFormatter: function () {
