@@ -48,17 +48,27 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 		    }, this);
 	    },
 
-	    _removeRow: function (query, callbacks) {
-		    return this.table().mapSuccess(function (table) {
-			    return Promise.funcCallback(table, table.remove, query);
+	    _removeRow: function (delParams, callbacks) {
+		    var req = this.table();
+		    var query = this.__formatDelete(delParams);
+		    var prom = Promise.create();
+		    req.query(query, {}, prom.asyncCallbackFunc());
+		    return prom.success(function (result) {
+			    return result;
+		    }, this).error(function (result) {
+			    return result;
 		    }, this);
 	    },
 
-	    _updateRow: function (query, row, callbacks) {
-		    return this.table().mapSuccess(function (table) {
-			    return Promise.funcCallback(table, table.update, query, {"$set" : row}).mapSuccess(function () {
-				    return row;
-			    });
+	    _updateRow: function (toUpdate, where) {
+		    var req = this.table();
+		    var query = this.__formatUpdate(toUpdate, where);
+		    var prom = Promise.create();
+		    req.query(query, {}, prom.asyncCallbackFunc());
+		    return prom.success(function (result) {
+			    return result;
+		    }, this).error(function (result) {
+			    return result;
 		    }, this);
 	    },
 
@@ -81,6 +91,32 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 	    __formatInsertRow: function (rowObject) {
 		    var sql = this.__getFormatter();
 		    return sql.insert(this.__tableName(), rowObject).toParams();
+	    },
+
+	    __formatDelete: function (toDelete) {
+		    var sql = this.__getFormatter();
+		    var query = sql.delete().from(this.__tableName());
+		    if (toDelete) {
+			    var where;
+			    if (Types.is_array(toDelete) || Types.is_object(toDelete)) {
+				    query = this.__extractWhereParams(toDelete, query);
+			    }
+		    }
+
+		    return query.toParams();
+	    },
+
+	    __formatUpdate: function (toUpdate, queryObj) {
+		    var sql = this.__getFormatter();
+		    var query = sql.update(this.__tableName(),toUpdate);
+		    if (queryObj) {
+			    var where;
+			    if (Types.is_array(queryObj) || Types.is_object(queryObj)) {
+				    query = this.__extractWhereParams(queryObj, query);
+			    }
+		    }
+
+		    return query.toParams();
 	    },
 
 	    __formatFind: function (queryObj, options) {
