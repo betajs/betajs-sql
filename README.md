@@ -15,9 +15,9 @@ You can use the library in your NodeJS project and compile it as well.
 
 ```javascript
 	var BetaJS = require('betajs/dist/beta.js');
-	require('betajs-data/dist/betajs-data.js');
-	require('betajs-server/dist/betajs-server.js');
-	require('betajs-server/dist/betajs-sql.js');
+    require('betajs-data/dist/betajs-data.js');
+    require('betajs-server/dist/betajs-server.js');
+    require('./dist/betajs-sql.js');
 ```
 
 
@@ -34,23 +34,37 @@ You can use the library in your NodeJS project and compile it as well.
 ## Basic Usage
 
 
-The BetaJS Server module contains the following subsystems:
-- Database Access and Database Store with Support for MongoDB
-- Server-Side AJAX
-- Server-Side Session Management
+The BetaJS SQL module contains the following subsystems:
+- Database Access and Database Store with support for PostgreSQL and RedShift SQL
 
 
 ```javascript
-	var mongodb = new BetaJS.Server.Databases.MongoDatabase("mongodb://localhost/test-db");
-	var store = new BetaJS.Server.Stores.MongoDatabaseStore(mongodb, "test-collection");
-	store.insert({x: 5}).success(function (object) {
-		console.log(object);
-		store.update(object.id, {
-			y: 7
-		}).success(function (row) {
-			console.log(row);
-		}, {z: 3});
-	});
+	var sqldb = new BetaJS.Server.Databases.SqlDatabase({
+    	user: "db-user",
+    	database: "db",
+    	password: "db-pass",
+    	port: "db-port",
+    	host: "db-host"
+    });
+    var store = new BetaJS.Server.Stores.SqlDatabaseStore(sqldb, "table");
+    store.insert({"col_1" : 1234, "col_2" : "val_2", "col_3" : 123, "col_4" : "val_4", "col_5" : "val_5"}).mapSuccess(function (res) {
+    	store.query({"col_1" : 1}, {"orderBy" : "id DESC"}).mapSuccess(function (res) { //First param the "where" options, second param the sorting and filter options 
+    		var r = res.next();
+    		store.update({"countrycode" : "ARG"}, {"id" : r.id}).mapSuccess(function (res) {
+    			store.remove({"population": 1, "countrycode" : "ARG"}).mapSuccess(function (res) {
+
+    			}).mapError(function (err) {
+    				console.log(err);
+    			});
+    		}).mapError(function (err) {
+    			console.log(err);
+    		});
+    	}).mapError(function (err) {
+    		console.log(err);
+    	});
+    }).mapError(function (err) {
+    	console.log(err);
+    });
 ```
 
 
