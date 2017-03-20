@@ -80,6 +80,14 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
 		    });
 	    },
 
+	    updateByData: function (updateData, queryData) {
+		    return this.updateRow(updateData, queryData);
+	    },
+
+	    removeByData: function (queryData) {
+		    return this.removeRow(queryData);
+	    },
+
 	    __tableName: function () {
 		    return this._table_name;
 	    },
