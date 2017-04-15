@@ -19,9 +19,11 @@
 		"grunt-jsdoc": "",
 		"grunt-shell": "",
 		"grunt-template": "",
+		"grunt-githooks": "",
 		"grunt-betajs-docs-compile": "",
 		"betajs-scoped": "",
-		"betajs-compile": "betajs/betajs-compile"
+		"betajs-compile": "",
+		"js-beautify": ""
 	},
 	"dependencies" : {
 		"betajs": "",
@@ -34,7 +36,7 @@
 		"url": "git://github.com/betajs/betajs-sql.git"
 	},
 	"meta": {
-		"guid": "9955100d-6a88-451f-9a85-004523eb8589",
+		"guid": "4631f510-61c4-4a38-8065-c8e57577625b",
 		"installdoc": "docsrc/common/install.md",
 		"summarydoc": "docsrc/common/summary.md",
 		"badges": {

@@ -21,13 +21,12 @@ module.exports = function(grunt) {
 		.uglifyTask('uglify-noscoped', 'dist/' + dist + '-noscoped.js', 'dist/' + dist + '-noscoped.min.js')
 		.uglifyTask('uglify-scoped', 'dist/' + dist + '.js', 'dist/' + dist + '.min.js')
 		.packageTask()
+        .jsbeautifyTask(null, "src/*.js")
 
 		/* Testing */
-		.qunitTask(null, './dist/' + dist + '-noscoped.js',
-			grunt.file.expand("./tests/*/*.js"),
-			[require.resolve("betajs-scoped"), require.resolve("betajs"), require.resolve("betajs-data"), require.resolve("betajs-server")])
 		.closureTask(null, [require.resolve("betajs-scoped"), require.resolve("betajs"), require.resolve("betajs-data"), require.resolve("betajs-server"), "./dist/betajs-sql-noscoped.js"])
 		.lintTask(null, ['./src/**/*.js', './dist/' + dist + '-noscoped.js', './dist/' + dist + '.js', './Gruntfile.js', './tests/**/*.js'])
+        .githookTask(null, "pre-commit", "check")
 
 		/* External Configurations */
 		.codeclimateTask()
@@ -41,8 +40,8 @@ module.exports = function(grunt) {
 
 	grunt.initConfig(gruntHelper.config);
 
-	grunt.registerTask('default', ['package', 'readme', 'license', 'codeclimate', 'scopedclosurerevision', 'concat-scoped', 'uglify-noscoped', 'uglify-scoped']);
-	grunt.registerTask('check', [ 'lint', 'qunit' ]);
+	grunt.registerTask('default', ['package', 'githook', 'readme', 'license', 'codeclimate', 'jsbeautify', 'scopedclosurerevision', 'concat-scoped', 'uglify-noscoped', 'uglify-scoped']);
+	grunt.registerTask('check', [ 'lint' ]);
 
 };
 
