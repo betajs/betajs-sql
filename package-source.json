@@ -31,6 +31,7 @@
 		"betajs-server": "",
 		"node-redshift": ""
 	},
+	"main": "dist/betajs-sql.js",
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/betajs/betajs-sql.git"
