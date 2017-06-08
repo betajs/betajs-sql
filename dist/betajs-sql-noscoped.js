@@ -1,5 +1,5 @@
 /*!
-betajs-sql - v1.0.1 - 2017-06-08
+betajs-sql - v1.0.2 - 2017-06-08
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
@@ -12,7 +12,7 @@ Scoped.binding('data', 'global:BetaJS.Data');
 Scoped.define("module:", function () {
 	return {
     "guid": "4631f510-61c4-4a38-8065-c8e57577625b",
-    "version": "1.0.1"
+    "version": "1.0.2"
 };
 });
 Scoped.assumeVersion('base:version', 'undefined');
@@ -238,7 +238,7 @@ Scoped.define("module:Databases.SqlDatabase", [
 
             constructor: function(db) {
                 if (Types.is_string(db)) {
-                    this.__dbUri = Strings.strip_start(db, "mssql://");
+                    this.__dbUri = db.substring(db.indexOf("://") + 3, db.length); //3 is the length of ://
                     this.__dbObject = this.cls.uriToObject(db);
                 } else {
                     db = Objs.extend({
@@ -285,13 +285,13 @@ Scoped.define("module:Databases.SqlDatabase", [
     }, {
 
         uriToObject: function(uri) {
-            var parsed = Uri.parse(uri);
+            var parsed = Uri.parse(Strings.strip_start(uri, "jdbc:"));
             return {
                 database: Strings.strip_start(parsed.path, "/"),
                 host: parsed.host,
                 port: parsed.port,
-                username: parsed.user,
-                password: parsed.password
+                user: (parsed.user) ? parsed.user : ((parsed.queryKey.user) ? parsed.queryKey.user : null),
+                password: (parsed.password) ? parsed.password : ((parsed.queryKey.password) ? parsed.queryKey.password : null)
             };
         },
 

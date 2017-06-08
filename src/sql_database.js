@@ -14,7 +14,7 @@ Scoped.define("module:Databases.SqlDatabase", [
 
             constructor: function(db) {
                 if (Types.is_string(db)) {
-                    this.__dbUri = Strings.strip_start(db, "mssql://");
+                    this.__dbUri = db.substring(db.indexOf("://") + 3, db.length); //3 is the length of ://
                     this.__dbObject = this.cls.uriToObject(db);
                 } else {
                     db = Objs.extend({
@@ -61,13 +61,13 @@ Scoped.define("module:Databases.SqlDatabase", [
     }, {
 
         uriToObject: function(uri) {
-            var parsed = Uri.parse(uri);
+            var parsed = Uri.parse(Strings.strip_start(uri, "jdbc:"));
             return {
                 database: Strings.strip_start(parsed.path, "/"),
                 host: parsed.host,
                 port: parsed.port,
-                username: parsed.user,
-                password: parsed.password
+                user: (parsed.user) ? parsed.user : ((parsed.queryKey.user) ? parsed.queryKey.user : null),
+                password: (parsed.password) ? parsed.password : ((parsed.queryKey.password) ? parsed.queryKey.password : null)
             };
         },
 
