@@ -1,5 +1,6 @@
-# betajs-sql 1.0.0
+# betajs-sql 1.0.1
 [![Code Climate](https://codeclimate.com/github/betajs/betajs-sql/badges/gpa.svg)](https://codeclimate.com/github/betajs/betajs-sql)
+[![NPM](https://img.shields.io/npm/v/betajs-sql.svg?style=flat)](https://www.npmjs.com/package/betajs-sql)
 
 
 BetaJS-SQL is a sql wrapper for BetaJS.
@@ -14,10 +15,9 @@ You can use the library in your NodeJS project and compile it as well.
 #### NodeJS
 
 ```javascript
-	var BetaJS = require('betajs/dist/beta.js');
-	require('betajs-data/dist/betajs-data.js');
-	require('betajs-server/dist/betajs-server.js');
-	require('betajs-server/dist/betajs-sql.js');
+	var BetaJS = require('betajs');
+	require('betajs-data');
+	require('betajs-sql');
 ```
 
 
@@ -34,19 +34,19 @@ You can use the library in your NodeJS project and compile it as well.
 ## Basic Usage
 
 
-The BetaJS Server module contains the following subsystems:
+The module contains the following subsystems:
 - Database Access and Database Store with Support for Postgres SQL.
 
 
 ```javascript
-	var sqldb = new BetaJS.Server.Databases.SqlDatabase({
+	var sqldb = new BetaJS.Data.Databases.SqlDatabase({
     	user: "user",
     	database: "db",
     	password: "pass",
     	port: "5432",
     	host: "localhost"
     });
-    var store = new BetaJS.Server.Stores.SqlDatabaseStore(sqldb, "table");
+    var store = new BetaJS.Data.Stores.SqlDatabaseStore(sqldb, "table");
     store.insert({"x" : 1}).mapSuccess(function (res) {
     	store.query({"x" : 1}, {"orderBy" : "id DESC"}).mapSuccess(function (res) {
     		var r = res.next();
@@ -107,7 +107,6 @@ The BetaJS Server module contains the following subsystems:
 | :----- | -------: |
 | betajs | [Open](https://github.com/betajs/betajs) |
 | betajs-data | [Open](https://github.com/betajs/betajs-data) |
-| betajs-server | [Open](https://github.com/betajs/betajs-server) |
 
 
 ## Weak Dependencies

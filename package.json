@@ -15,7 +15,7 @@
         "url": "https://github.com/betajs/betajs-sql/issues"
     },
     "name": "betajs-sql",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "BetaJS-SQL is a sql wrapper for BetaJS.",
     "contributors": [
         "Pablo Iglesias"
@@ -25,7 +25,7 @@
         "grunt": "",
         "grunt-contrib-jshint": "",
         "grunt-contrib-concat": "",
-        "grunt-contrib-uglify": "",
+        "grunt-contrib-uglify": "~2.3.0",
         "grunt-contrib-clean": "",
         "grunt-preprocess": "",
         "grunt-git-revision-count": "",
@@ -38,14 +38,13 @@
         "grunt-template": "",
         "grunt-githooks": "",
         "grunt-betajs-docs-compile": "",
-        "betajs-scoped": "",
-        "betajs-compile": "",
+        "betajs-scoped": "~0.0.13",
+        "betajs-compile": "~0.0.28",
         "js-beautify": ""
     },
     "dependencies": {
-        "betajs": "",
-        "betajs-data": "",
-        "betajs-server": "",
+        "betajs": "~1.0.96",
+        "betajs-data": "~1.0.41",
         "node-redshift": ""
     },
     "repository": {
@@ -61,7 +60,7 @@
         "badges": {
             "codeclimate": true,
             "travis": false,
-            "npm": false
+            "npm": true
         },
         "compatability": {
             "NodeJS": "0.10 - Latest"
@@ -71,8 +70,7 @@
         },
         "dependencies": {
             "betajs": "https://github.com/betajs/betajs",
-            "betajs-data": "https://github.com/betajs/betajs-data",
-            "betajs-server": "https://github.com/betajs/betajs-server"
+            "betajs-data": "https://github.com/betajs/betajs-data"
         },
         "cdn": {
             "betajs-sql.js": "http://cdn.rawgit.com/betajs/betajs-sql/master/dist/betajs-sql.js",

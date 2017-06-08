@@ -1,78 +1,24 @@
 /*!
-betajs-sql - v1.0.0 - 2017-04-15
+betajs-sql - v1.0.1 - 2017-06-08
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
 
 (function () {
 var Scoped = this.subScope();
-Scoped.binding('module', 'global:BetaJS.Server.Sql');
-Scoped.binding('server', 'global:BetaJS.Server');
+Scoped.binding('module', 'global:BetaJS.Data.Databases');
 Scoped.binding('base', 'global:BetaJS');
 Scoped.binding('data', 'global:BetaJS.Data');
 Scoped.define("module:", function () {
 	return {
     "guid": "4631f510-61c4-4a38-8065-c8e57577625b",
-    "version": "1.0.0"
+    "version": "1.0.1"
 };
 });
 Scoped.assumeVersion('base:version', 'undefined');
 Scoped.assumeVersion('data:version', 'undefined');
-Scoped.define("server:Stores.SqlDatabaseStore", [
-    "data:Stores.TransformationStore",
-    "base:Objs",
-    "server:Stores.DatabaseStore"
-], function(TransformationStore, Objs, DatabaseStore, scoped) {
-    return TransformationStore.extend({
-        scoped: scoped
-    }, function(inherited) {
-        return {
-
-            constructor: function(database, table_name, types, foreign_id) {
-                var store = new DatabaseStore(database, table_name, foreign_id);
-                this.__store = store;
-                inherited.constructor.call(this, store);
-            },
-
-            table: function() {
-                return this.store().table();
-            },
-
-            store: function() {
-                return this.__store;
-            },
-
-            _encodeSort: function(data) {
-                var result = {};
-                Objs.iter(data, function(value, key) {
-                    if (key === "id")
-                        key = "_id";
-                    result[key] = value;
-                });
-                return result;
-            },
-
-            _encodeData: function(data) {
-                return data;
-            },
-
-            _decodeData: function(data) {
-                return data;
-            },
-
-            _update: function(updateData, queryData) {
-                return this.table().updateByData(updateData, queryData);
-            },
-
-            _remove: function(removeData) {
-                return this.table().removeByData(removeData);
-            }
-
-        };
-    });
-});
-Scoped.define("server:Databases.SqlDatabaseTable", [
-    "server:Databases.DatabaseTable",
+Scoped.define("module:Databases.SqlDatabaseTable", [
+    "data:Databases.DatabaseTable",
     "base:Promise",
     "base:Objs",
     "base:Types",
@@ -83,13 +29,16 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
     }, {
 
         table: function(table_id) {
-            if (table_id)
-                this._table_id = table_id;
+            this._table_id = table_id || "id";
             if (this.__req)
                 return this.__req;
             this.__req = this._database.sqldb();
             this.__sqlbricks = this._database.sql_bricks;
             return this.__req;
+        },
+
+        primary_key: function() {
+            return this._table_id;
         },
 
         _encode: function(data) {
@@ -273,9 +222,9 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
         }
     });
 });
-Scoped.define("server:Databases.SqlDatabase", [
-    "server:Databases.Database",
-    "server:Databases.SqlDatabaseTable",
+Scoped.define("module:Databases.SqlDatabase", [
+    "data:Databases.Database",
+    "data:Databases.SqlDatabaseTable",
     "base:Strings",
     "base:Types",
     "base:Objs",

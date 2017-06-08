@@ -9,8 +9,7 @@ module.exports = function(grunt) {
 
 	/* Compilation */
 		.scopedclosurerevisionTask(null, "src/**/*.js", "dist/" + dist + "-noscoped.js", {
-			"module": "global:BetaJS.Server.Sql",
-			"server": "global:BetaJS.Server",
+			"module": "global:BetaJS.Data.Databases",
 			"base": "global:BetaJS",
 			"data": "global:BetaJS.Data"
 		}, {

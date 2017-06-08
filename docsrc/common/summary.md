@@ -1,16 +1,16 @@
-The BetaJS Server module contains the following subsystems:
+The module contains the following subsystems:
 - Database Access and Database Store with Support for Postgres SQL.
 
 
 ```javascript
-	var sqldb = new BetaJS.Server.Databases.SqlDatabase({
+	var sqldb = new BetaJS.Data.Databases.SqlDatabase({
     	user: "user",
     	database: "db",
     	password: "pass",
     	port: "5432",
     	host: "localhost"
     });
-    var store = new BetaJS.Server.Stores.SqlDatabaseStore(sqldb, "table");
+    var store = new BetaJS.Data.Stores.SqlDatabaseStore(sqldb, "table");
     store.insert({"x" : 1}).mapSuccess(function (res) {
     	store.query({"x" : 1}, {"orderBy" : "id DESC"}).mapSuccess(function (res) {
     		var r = res.next();

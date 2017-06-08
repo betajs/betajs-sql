@@ -1,5 +1,5 @@
-Scoped.define("server:Databases.SqlDatabaseTable", [
-    "server:Databases.DatabaseTable",
+Scoped.define("module:Databases.SqlDatabaseTable", [
+    "data:Databases.DatabaseTable",
     "base:Promise",
     "base:Objs",
     "base:Types",
@@ -10,13 +10,16 @@ Scoped.define("server:Databases.SqlDatabaseTable", [
     }, {
 
         table: function(table_id) {
-            if (table_id)
-                this._table_id = table_id;
+            this._table_id = table_id || "id";
             if (this.__req)
                 return this.__req;
             this.__req = this._database.sqldb();
             this.__sqlbricks = this._database.sql_bricks;
             return this.__req;
+        },
+
+        primary_key: function() {
+            return this._table_id;
         },
 
         _encode: function(data) {
