@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
 	/* Compilation */
 		.scopedclosurerevisionTask(null, "src/**/*.js", "dist/" + dist + "-noscoped.js", {
-			"module": "global:BetaJS.Data.Databases",
+			"module": "global:BetaJS.Data.Databases.Sql",
 			"base": "global:BetaJS",
 			"data": "global:BetaJS.Data"
 		}, {
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         .jsbeautifyTask(null, "src/*.js")
 
 		/* Testing */
-		.closureTask(null, [require.resolve("betajs-scoped"), require.resolve("betajs"), require.resolve("betajs-data"), require.resolve("betajs-server"), "./dist/betajs-sql-noscoped.js"])
+		.closureTask(null, [require.resolve("betajs-scoped"), require.resolve("betajs"), require.resolve("betajs-data"), "./dist/betajs-sql-noscoped.js"])
 		.lintTask(null, ['./src/**/*.js', './dist/' + dist + '-noscoped.js', './dist/' + dist + '.js', './Gruntfile.js', './tests/**/*.js'])
         .githookTask(null, "pre-commit", "check")
 

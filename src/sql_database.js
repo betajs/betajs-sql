@@ -1,6 +1,6 @@
-Scoped.define("module:Databases.SqlDatabase", [
+Scoped.define("module:SqlDatabase", [
     "data:Databases.Database",
-    "data:Databases.SqlDatabaseTable",
+    "module:SqlDatabaseTable",
     "base:Strings",
     "base:Types",
     "base:Objs",
