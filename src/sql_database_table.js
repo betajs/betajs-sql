@@ -1,4 +1,4 @@
-Scoped.define("module:Databases.SqlDatabaseTable", [
+Scoped.define("module:SqlDatabaseTable", [
     "data:Databases.DatabaseTable",
     "base:Promise",
     "base:Objs",
