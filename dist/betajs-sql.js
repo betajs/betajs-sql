@@ -1,5 +1,5 @@
 /*!
-betajs-sql - v1.0.2 - 2017-06-08
+betajs-sql - v1.0.2 - 2017-06-15
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
@@ -1004,14 +1004,14 @@ Public.exports();
 	return Public;
 }).call(this);
 /*!
-betajs-sql - v1.0.2 - 2017-06-08
+betajs-sql - v1.0.2 - 2017-06-15
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
 
 (function () {
 var Scoped = this.subScope();
-Scoped.binding('module', 'global:BetaJS.Data.Databases');
+Scoped.binding('module', 'global:BetaJS.Data.Databases.Sql');
 Scoped.binding('base', 'global:BetaJS');
 Scoped.binding('data', 'global:BetaJS.Data');
 Scoped.define("module:", function () {
@@ -1022,7 +1022,7 @@ Scoped.define("module:", function () {
 });
 Scoped.assumeVersion('base:version', 'undefined');
 Scoped.assumeVersion('data:version', 'undefined');
-Scoped.define("module:Databases.SqlDatabaseTable", [
+Scoped.define("module:SqlDatabaseTable", [
     "data:Databases.DatabaseTable",
     "base:Promise",
     "base:Objs",
@@ -1227,9 +1227,9 @@ Scoped.define("module:Databases.SqlDatabaseTable", [
         }
     });
 });
-Scoped.define("module:Databases.SqlDatabase", [
+Scoped.define("module:SqlDatabase", [
     "data:Databases.Database",
-    "data:Databases.SqlDatabaseTable",
+    "module:SqlDatabaseTable",
     "base:Strings",
     "base:Types",
     "base:Objs",
