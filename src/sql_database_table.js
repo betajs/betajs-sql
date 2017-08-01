@@ -34,7 +34,7 @@ Scoped.define("module:SqlDatabaseTable", [
             var req = this.table();
             var query = this.__formatFind(baseQuery, options);
             var prom = Promise.create();
-            return Promise.funcCallback(req, req.query, query, {}).mapSuccess(function(result) {
+            return Promise.funcCallback(req, req.rawQuery, query, {}).mapSuccess(function(result) {
                 return new ArrayIterator(result.rows);
             }, this).mapError(function(err) {
                 return err;
@@ -45,7 +45,7 @@ Scoped.define("module:SqlDatabaseTable", [
             var req = this.table();
             var query = this.__formatInsertRow(row);
             var prom = Promise.create();
-            req.query(query, {}, prom.asyncCallbackFunc());
+            req.rawQuery(query, {}, prom.asyncCallbackFunc());
             return prom.success(function(result) {
                 return result;
             }, this).error(function(result) {
@@ -57,7 +57,7 @@ Scoped.define("module:SqlDatabaseTable", [
             var req = this.table();
             var query = this.__formatDelete(delParams);
             var prom = Promise.create();
-            req.query(query, {}, prom.asyncCallbackFunc());
+            req.rawQuery(query, {}, prom.asyncCallbackFunc());
             return prom.success(function(result) {
                 return result;
             }, this).error(function(result) {
@@ -69,7 +69,7 @@ Scoped.define("module:SqlDatabaseTable", [
             var req = this.table();
             var query = this.__formatUpdate(toUpdate, where);
             var prom = Promise.create();
-            req.query(query, {}, prom.asyncCallbackFunc());
+            req.rawQuery(query, {}, prom.asyncCallbackFunc());
             return prom.success(function(result) {
                 return result;
             }, this).error(function(result) {
