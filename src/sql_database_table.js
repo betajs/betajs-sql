@@ -53,7 +53,7 @@ Scoped.define("module:SqlDatabaseTable", [
             }, this);
         },
 
-        _removeRow: function(delParams, callbacks) {
+        _removeRow: function(delParams) {
             var req = this.table();
             var query = this.__formatDelete(delParams);
             var prom = Promise.create();
