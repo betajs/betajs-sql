@@ -37,7 +37,9 @@ Scoped.define("module:SqlDatabase", [
                 var ret = this.__sqldb;
                 if (!this.__sqldb) {
                     var sqldbman = this.sql_module;
-                    var sqldb = new sqldbman(this.__dbObject);
+                    var sqldb = new sqldbman(this.__dbObject, {
+                        rawConnection: true
+                    });
                     this.__sqldb = sqldb;
                     ret = sqldb;
                 }
