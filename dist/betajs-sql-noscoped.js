@@ -1,5 +1,5 @@
 /*!
-betajs-sql - v1.0.2 - 2017-06-15
+betajs-sql - v1.0.4 - 2020-06-02
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
@@ -12,7 +12,8 @@ Scoped.binding('data', 'global:BetaJS.Data');
 Scoped.define("module:", function () {
 	return {
     "guid": "4631f510-61c4-4a38-8065-c8e57577625b",
-    "version": "1.0.2"
+    "version": "1.0.4",
+    "datetime": 1591112834001
 };
 });
 Scoped.assumeVersion('base:version', 'undefined');
@@ -72,7 +73,7 @@ Scoped.define("module:SqlDatabaseTable", [
             }, this);
         },
 
-        _removeRow: function(delParams, callbacks) {
+        _removeRow: function(delParams) {
             var req = this.table();
             var query = this.__formatDelete(delParams);
             var prom = Promise.create();
@@ -153,17 +154,18 @@ Scoped.define("module:SqlDatabaseTable", [
 
         __formatFind: function(queryObj, options) {
             options = options || {};
-            var columns = options.columns || "*";
             var sql = this.__getFormatter();
-            var query = sql.select(columns).from(this.__tableName());
+            var query = sql.select().from(this.__tableName());
+            if (options.distinct)
+                query.distinct(options.distinct);
+            if (options.columns)
+                query.select(options.columns);
             if (queryObj) {
                 var where;
                 if (Types.is_array(queryObj) || Types.is_object(queryObj)) {
                     query = this.__extractWhereParams(queryObj, query);
                 }
             }
-            if (options.distinct)
-                query = sql.distinct(columns).from(this.__tableName());
 
             if (options.groupBy)
                 query.groupBy(options.groupBy);
@@ -261,7 +263,9 @@ Scoped.define("module:SqlDatabase", [
                 var ret = this.__sqldb;
                 if (!this.__sqldb) {
                     var sqldbman = this.sql_module;
-                    var sqldb = new sqldbman(this.__dbObject);
+                    var sqldb = new sqldbman(this.__dbObject, {
+                        rawConnection: true
+                    });
                     this.__sqldb = sqldb;
                     ret = sqldb;
                 }
@@ -279,6 +283,10 @@ Scoped.define("module:SqlDatabase", [
 
             sqldbReqObj: function() {
                 return this.__sqldbreq;
+            },
+
+            close: function() {
+                this.__sqldb.close();
             }
         };
 
