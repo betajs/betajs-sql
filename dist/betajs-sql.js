@@ -1,10 +1,10 @@
 /*!
-betajs-sql - v1.0.2 - 2017-06-15
+betajs-sql - v1.0.4 - 2020-06-02
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
 /** @flow **//*!
-betajs-scoped - v0.0.13 - 2017-01-15
+betajs-scoped - v0.0.22 - 2019-10-23
 Copyright (c) Oliver Friedmann
 Apache-2.0 Software License.
 */
@@ -16,7 +16,7 @@ var Globals = (function () {
  * @module Globals
  * @access private
  */
-return { 
+return {
 		
 	/**
 	 * Returns the value of a global variable.
@@ -26,11 +26,11 @@ return {
 	 */
 	get : function(key/* : string */) {
 		if (typeof window !== "undefined")
-			return window[key];
+			return key ? window[key] : window;
 		if (typeof global !== "undefined")
-			return global[key];
+			return key ? global[key] : global;
 		if (typeof self !== "undefined")
-			return self[key];
+			return key ? self[key] : self;
 		return undefined;
 	},
 
@@ -64,6 +64,8 @@ return {
 	 * Globals.getPath("foo.bar")
 	 */
 	getPath: function (path/* : string */) {
+		if (!path)
+			return this.get();
 		var args = path.split(".");
 		if (args.length == 1)
 			return this.get(path);		
@@ -240,13 +242,15 @@ return {
 	 */
 	upgrade: function (namespace/* : ?string */) {
 		var current = Globals.get(namespace || Attach.__namespace);
-		if (current && Helper.typeOf(current) == "object" && current.guid == this.guid && Helper.typeOf(current.version) == "string") {
+		if (current && Helper.typeOf(current) === "object" && current.guid === this.guid && Helper.typeOf(current.version) === "string") {
+			if (this.upgradable === false || current.upgradable === false)
+				return current;
 			var my_version = this.version.split(".");
 			var current_version = current.version.split(".");
 			var newer = false;
 			for (var i = 0; i < Math.min(my_version.length, current_version.length); ++i) {
 				newer = parseInt(my_version[i], 10) > parseInt(current_version[i], 10);
-				if (my_version[i] != current_version[i]) 
+				if (my_version[i] !== current_version[i])
 					break;
 			}
 			return newer ? this.attach(namespace) : current;				
@@ -265,7 +269,7 @@ return {
 		if (namespace)
 			Attach.__namespace = namespace;
 		var current = Globals.get(Attach.__namespace);
-		if (current == this)
+		if (current === this)
 			return this;
 		Attach.__revert = current;
 		if (current) {
@@ -310,7 +314,7 @@ return {
 	 */
 	exports: function (mod, object, forceExport) {
 		mod = mod || (typeof module != "undefined" ? module : null);
-		if (typeof mod == "object" && mod && "exports" in mod && (forceExport || mod.exports == this || !mod.exports || Helper.isEmpty(mod.exports)))
+		if (typeof mod == "object" && mod && "exports" in mod && (forceExport || mod.exports === this || !mod.exports || Helper.isEmpty(mod.exports)))
 			mod.exports = object || this;
 		return this;
 	}	
@@ -474,7 +478,7 @@ function newNamespace (opts/* : {tree ?: boolean, global ?: boolean, root ?: Obj
 	function nodeUnresolvedWatchers(node/* : Node */, base, result) {
 		node = node || nsRoot;
 		result = result || [];
-		if (!node.ready)
+		if (!node.ready && node.lazy.length === 0 && node.watchers.length > 0)
 			result.push(base);
 		for (var k in node.children) {
 			var c = node.children[k];
@@ -638,7 +642,10 @@ function newScope (parent, parentNS, rootNS, globalNS) {
 		
 		var execute = function () {
 			this.require(args.dependencies, args.hiddenDependencies, function () {
-				arguments[arguments.length - 1].ns = ns;
+                var _arguments = [];
+                for (var a = 0; a < arguments.length; ++a)
+                    _arguments.push(arguments[a]);
+                _arguments[_arguments.length - 1].ns = ns;
 				if (this.options.compile) {
 					var params = [];
 					for (var i = 0; i < argmts.length; ++i)
@@ -658,7 +665,7 @@ function newScope (parent, parentNS, rootNS, globalNS) {
 						}, this);
 					}
 				}
-				var result = this.options.compile ? {} : args.callback.apply(args.context || this, arguments);
+				var result = this.options.compile ? {} : args.callback.apply(args.context || this, _arguments);
 				callback.call(this, ns, result);
 			}, this);
 		};
@@ -754,10 +761,7 @@ function newScope (parent, parentNS, rootNS, globalNS) {
 		resolve: function (namespaceLocator) {
 			var parts = namespaceLocator.split(":");
 			if (parts.length == 1) {
-				return {
-					namespace: privateNamespace,
-					path: parts[0]
-				};
+                throw ("The locator '" + parts[0] + "' requires a namespace.");
 			} else {
 				var binding = bindings[parts[0]];
 				if (!binding)
@@ -826,7 +830,7 @@ function newScope (parent, parentNS, rootNS, globalNS) {
 		
 		
 		/**
-		 * Extends a potentiall existing name space once a list of name space locators is available.
+		 * Extends a potentially existing name space once a list of name space locators is available.
 		 * 
 		 * @param {string} namespaceLocator the name space that is to be defined
 		 * @param {array} dependencies a list of name space locator dependencies (optional)
@@ -962,7 +966,9 @@ var Public = Helper.extend(rootScope, (function () {
 return {
 		
 	guid: "4b6878ee-cb6a-46b3-94ac-27d91f58d666",
-	version: '0.0.13',
+	version: '0.0.22',
+
+	upgradable: true,
 		
 	upgrade: Attach.upgrade,
 	attach: Attach.attach,
@@ -1004,7 +1010,7 @@ Public.exports();
 	return Public;
 }).call(this);
 /*!
-betajs-sql - v1.0.2 - 2017-06-15
+betajs-sql - v1.0.4 - 2020-06-02
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
@@ -1017,7 +1023,8 @@ Scoped.binding('data', 'global:BetaJS.Data');
 Scoped.define("module:", function () {
 	return {
     "guid": "4631f510-61c4-4a38-8065-c8e57577625b",
-    "version": "1.0.2"
+    "version": "1.0.4",
+    "datetime": 1591112834001
 };
 });
 Scoped.assumeVersion('base:version', 'undefined');
@@ -1077,7 +1084,7 @@ Scoped.define("module:SqlDatabaseTable", [
             }, this);
         },
 
-        _removeRow: function(delParams, callbacks) {
+        _removeRow: function(delParams) {
             var req = this.table();
             var query = this.__formatDelete(delParams);
             var prom = Promise.create();
@@ -1158,17 +1165,18 @@ Scoped.define("module:SqlDatabaseTable", [
 
         __formatFind: function(queryObj, options) {
             options = options || {};
-            var columns = options.columns || "*";
             var sql = this.__getFormatter();
-            var query = sql.select(columns).from(this.__tableName());
+            var query = sql.select().from(this.__tableName());
+            if (options.distinct)
+                query.distinct(options.distinct);
+            if (options.columns)
+                query.select(options.columns);
             if (queryObj) {
                 var where;
                 if (Types.is_array(queryObj) || Types.is_object(queryObj)) {
                     query = this.__extractWhereParams(queryObj, query);
                 }
             }
-            if (options.distinct)
-                query = sql.distinct(columns).from(this.__tableName());
 
             if (options.groupBy)
                 query.groupBy(options.groupBy);
@@ -1266,7 +1274,9 @@ Scoped.define("module:SqlDatabase", [
                 var ret = this.__sqldb;
                 if (!this.__sqldb) {
                     var sqldbman = this.sql_module;
-                    var sqldb = new sqldbman(this.__dbObject);
+                    var sqldb = new sqldbman(this.__dbObject, {
+                        rawConnection: true
+                    });
                     this.__sqldb = sqldb;
                     ret = sqldb;
                 }
@@ -1284,6 +1294,10 @@ Scoped.define("module:SqlDatabase", [
 
             sqldbReqObj: function() {
                 return this.__sqldbreq;
+            },
+
+            close: function() {
+                this.__sqldb.close();
             }
         };
 

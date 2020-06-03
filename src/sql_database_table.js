@@ -134,17 +134,18 @@ Scoped.define("module:SqlDatabaseTable", [
 
         __formatFind: function(queryObj, options) {
             options = options || {};
-            var columns = options.columns || "*";
             var sql = this.__getFormatter();
-            var query = sql.select(columns).from(this.__tableName());
+            var query = sql.select().from(this.__tableName());
+            if (options.distinct)
+                query.distinct(options.distinct);
+            if (options.columns)
+                query.select(options.columns);
             if (queryObj) {
                 var where;
                 if (Types.is_array(queryObj) || Types.is_object(queryObj)) {
                     query = this.__extractWhereParams(queryObj, query);
                 }
             }
-            if (options.distinct)
-                query = sql.distinct(columns).from(this.__tableName());
 
             if (options.groupBy)
                 query.groupBy(options.groupBy);
