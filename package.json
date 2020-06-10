@@ -45,7 +45,8 @@
     "dependencies": {
         "betajs": "~1.0.96",
         "betajs-data": "~1.0.41",
-        "node-redshift": ""
+        "node-redshift": "",
+        "sql-bricks": ""
     },
     "main": "dist/betajs-sql.js",
     "repository": {

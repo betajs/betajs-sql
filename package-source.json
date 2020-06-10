@@ -1,6 +1,6 @@
 {
 	"name": "betajs-sql",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "BetaJS-SQL is a sql wrapper for BetaJS.",
 	"contributors": ["Pablo Iglesias"],
 	"devDependencies": {
@@ -28,7 +28,8 @@
 	"dependencies" : {
 		"betajs": "~1.0.96",
 		"betajs-data": "~1.0.41",
-		"node-redshift": ""
+		"node-redshift": "",
+		"sql-bricks": ""
 	},
 	"main": "dist/betajs-sql.js",
 	"repository": {
