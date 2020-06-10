@@ -1,4 +1,4 @@
-# betajs-sql 1.0.3
+# betajs-sql 1.0.5
 [![Code Climate](https://codeclimate.com/github/betajs/betajs-sql/badges/gpa.svg)](https://codeclimate.com/github/betajs/betajs-sql)
 [![NPM](https://img.shields.io/npm/v/betajs-sql.svg?style=flat)](https://www.npmjs.com/package/betajs-sql)
 
@@ -77,11 +77,11 @@ The module contains the following subsystems:
 ## Links
 | Resource   | URL |
 | :--------- | --: |
-| Homepage   | [http://betajs.com](http://betajs.com) |
+| Homepage   | [https://betajs.com](https://betajs.com) |
 | Git        | [git://github.com/betajs/betajs-sql.git](git://github.com/betajs/betajs-sql.git) |
 | Repository | [https://github.com/betajs/betajs-sql](https://github.com/betajs/betajs-sql) |
-| Blog       | [http://blog.betajs.com](http://blog.betajs.com) | 
-| Twitter    | [http://twitter.com/thebetajs](http://twitter.com/thebetajs) | 
+| Blog       | [https://blog.betajs.com](https://blog.betajs.com) | 
+| Twitter    | [https://twitter.com/thebetajs](https://twitter.com/thebetajs) | 
  
 
 
