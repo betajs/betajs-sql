@@ -1,5 +1,5 @@
 /*!
-betajs-sql - v1.0.5 - 2020-06-10
+betajs-sql - v1.0.6 - 2020-06-10
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
@@ -1010,7 +1010,7 @@ Public.exports();
 	return Public;
 }).call(this);
 /*!
-betajs-sql - v1.0.5 - 2020-06-10
+betajs-sql - v1.0.6 - 2020-06-10
 Copyright (c) Pablo Iglesias
 Apache-2.0 Software License.
 */
@@ -1023,8 +1023,8 @@ Scoped.binding('data', 'global:BetaJS.Data');
 Scoped.define("module:", function () {
 	return {
     "guid": "4631f510-61c4-4a38-8065-c8e57577625b",
-    "version": "1.0.5",
-    "datetime": 1591797144372
+    "version": "1.0.6",
+    "datetime": 1591801077057
 };
 });
 Scoped.assumeVersion('base:version', 'undefined');
