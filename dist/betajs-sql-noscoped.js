@@ -13,7 +13,7 @@ Scoped.define("module:", function () {
 	return {
     "guid": "4631f510-61c4-4a38-8065-c8e57577625b",
     "version": "1.0.6",
-    "datetime": 1591801077057
+    "datetime": 1591827500371
 };
 });
 Scoped.assumeVersion('base:version', 'undefined');
@@ -263,9 +263,7 @@ Scoped.define("module:SqlDatabase", [
                 var ret = this.__sqldb;
                 if (!this.__sqldb) {
                     var sqldbman = this.sql_module;
-                    var sqldb = new sqldbman(this.__dbObject, {
-                        rawConnection: true
-                    });
+                    var sqldb = new sqldbman(this.__dbObject);
                     this.__sqldb = sqldb;
                     ret = sqldb;
                 }
