@@ -31,6 +31,10 @@
 		"node-redshift": "",
 		"sql-bricks": ""
 	},
+	"scripts": {
+		"relink": "npm link betajs && npm link betajs-compile && npm link betajs-scoped && npm link betajs-data",
+		"reinstall": "rm -f package-lock.json && rm -rf node_modules && npm i && npm run relink"
+	},
 	"main": "dist/betajs-sql.js",
 	"repository": {
 		"type": "git",
