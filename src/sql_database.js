@@ -25,7 +25,7 @@ Scoped.define("module:SqlDatabase", [
                     this.__dbUri = this.cls.objectToUri(db);
                 }
                 inherited.constructor.call(this);
-                this.sql_module = require("node-redshift");
+                this.sql_module = require("ziggeo-aws-redshift");
                 this.sql_bricks = require("sql-bricks");
             },
 
